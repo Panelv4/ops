@@ -1,0 +1,39 @@
+body{
+margin:0;
+font-family:Arial,sans-serif;
+display:flex;
+background:#f5f5f5;
+}
+
+.sidebar{
+width:220px;
+background:#222;
+color:white;
+height:100vh;
+padding:20px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+margin:12px 0;
+}
+
+.content{
+flex:1;
+padding:25px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+}

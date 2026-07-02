@@ -1,10 +1,40 @@
-{% extends "layout/base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial; background: #0f172a; color: white; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 10px; }
+        h1 { color: #38bdf8; }
+    </style>
+</head>
+<body>
 
-{% block content %}
+<h1>⚡ Live SaaS Admin Dashboard</h1>
 
-<h2>Admin Panel</h2>
+<div class="grid">
+    <div class="card">Users: <span id="users">0</span></div>
+    <div class="card">Companies: <span id="companies">0</span></div>
+    <div class="card">Leads: <span id="leads">0</span></div>
+    <div class="card">Tickets: <span id="tickets">0</span></div>
+</div>
 
-<button onclick="alert('User promoted!')">Promote User</button>
-<button onclick="alert('Company created!')">Create Company</button>
+<script>
+async function loadStats() {
+    const res = await fetch('/admin/stats');
+    const data = await res.json();
 
-{% endblock %}
+    document.getElementById("users").innerText = data.users;
+    document.getElementById("companies").innerText = data.companies;
+    document.getElementById("leads").innerText = data.leads;
+    document.getElementById("tickets").innerText = data.tickets;
+}
+
+// refresh every 2 seconds (LIVE DASHBOARD)
+setInterval(loadStats, 2000);
+loadStats();
+</script>
+
+</body>
+</html>

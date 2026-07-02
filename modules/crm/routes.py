@@ -32,3 +32,9 @@ def add_lead():
     conn.close()
 
     return jsonify({"status": "created", "score": score})
+
+from flask import render_template
+
+@crm_bp.route("/crm")
+def crm_page():
+    return render_template("crm/index.html")

@@ -1,30 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OpsPilotAI SaaS</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+
+<meta charset="UTF-8">
+
+<title>{{ title if title else "OpsPilot" }}</title>
+
+<link rel="stylesheet" href="/static/css/app.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
 <div class="sidebar">
-    <h2>OpsPilotAI</h2>
 
-    <a href="/dashboard">📊 Dashboard</a>
-    <a href="/crm">💼 CRM</a>
-    <a href="/support">🎧 Support</a>
-    <a href="/hr">👨‍💼 HR</a>
-    <a href="/admin-page">🔐 Admin</a>
+<h2>OpsPilot</h2>
+
+<a href="/dashboard">🏠 Dashboard</a>
+
+<a href="/employees">👥 Employees</a>
+
+<a href="/attendance">🕒 Attendance</a>
+
+<a href="/tasks">📋 Tasks</a>
+
+<a href="/crm">💼 CRM</a>
+
+<a href="/customers">👤 Customers</a>
+
+<a href="/orders">🛒 Orders</a>
+
+<a href="/inventory">📦 Inventory</a>
+
+<a href="/finance">💰 Finance</a>
+
+<a href="/analytics">📊 Analytics</a>
+
+<a href="/mail">📧 Mail</a>
+
+<a href="/settings">⚙ Settings</a>
+
 </div>
 
 <div class="main">
-    <div class="topbar">
-        <h3>SaaS Control Panel 🚀</h3>
-    </div>
 
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
+{% block content %}
+
+{% endblock %}
+
 </div>
 
 </body>

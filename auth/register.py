@@ -5,31 +5,46 @@ register_bp = Blueprint("register", __name__)
 
 @register_bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
+    try:
+        data = request.get_json(force=True)
 
-    username = data["username"]
-    email = data["email"]
-    password = data["password"]
-    company_name = data["company"]
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+        company_name = data.get("company")
 
-    conn = get_connection()
-    cursor = conn.cursor()
+        if not all([username, email, password, company_name]):
+            return jsonify({
+                "status": "error",
+                "message": "missing fields"
+            }), 400
 
-    # create company
-    cursor.execute("INSERT INTO companies (name) VALUES (?)", (company_name,))
-    company_id = cursor.lastrowid
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    # create user linked to company
-    cursor.execute("""
-        INSERT INTO users (username, email, password, role, company_id)
-        VALUES (?, ?, ?, ?, ?)
-    """, (username, email, password, "admin", company_id))
+        # create company
+        cursor.execute(
+            "INSERT INTO companies (name) VALUES (?)",
+            (company_name,)
+        )
+        company_id = cursor.lastrowid
 
-    conn.commit()
-    conn.close()
+        # create user
+        cursor.execute("""
+            INSERT INTO users (username, email, password, role, company_id)
+            VALUES (?, ?, ?, ?, ?)
+        """, (username, email, password, "admin", company_id))
 
-    return jsonify({
-        "status": "success",
-        "message": "SaaS workspace created",
-        "company_id": company_id
-    })
+        conn.commit()
+
+        return jsonify({
+            "status": "success",
+            "user": email,
+            "company_id": company_id
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500

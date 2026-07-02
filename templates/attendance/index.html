@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR SaaS Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            margin: 10px;
+        }
+
+        .topbar {
+            padding: 10px;
+            background: #111827;
+            color: white;
+        }
+
+        .controls {
+            margin: 10px;
+        }
+
+        select, button {
+            padding: 6px;
+            margin: 4px;
+        }
+
+        /* KPI GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 10px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 14px;
+            color: gray;
+        }
+
+        .card p {
+            font-size: 20px;
+            margin: 5px 0 0 0;
+        }
+
+        #chartBox {
+            width: 260px;
+            height: 260px;
+            margin: 10px auto;
+        }
+
+        pre {
+            font-size: 12px;
+            margin: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    🧠 HR SaaS Dashboard
+</div>
+
+<div class="controls">
+    <select id="empSelect"></select>
+    <button onclick="checkIn()">Check In</button>
+    <button onclick="checkOut()">Check Out</button>
+</div>
+
+<!-- KPI CARDS -->
+<div class="grid">
+    <div class="card"><h3>Present</h3><p id="present">0</p></div>
+    <div class="card"><h3>Late</h3><p id="late">0</p></div>
+    <div class="card"><h3>Active</h3><p id="active">0</p></div>
+    <div class="card"><h3>Inactive</h3><p id="inactive">0</p></div>
+</div>
+
+<!-- CHART -->
+<div id="chartBox">
+    <canvas id="pieChart"></canvas>
+</div>
+
+<pre id="raw"></pre>
+
+<script>
+
+let chart;
+
+async function loadEmployees() {
+    let res = await fetch("/api/employees");
+    let data = await res.json();
+
+    let select = document.getElementById("empSelect");
+    select.innerHTML = "";
+
+    data.forEach(e => {
+        let opt = document.createElement("option");
+        opt.value = e.id;
+        opt.textContent = e.name || ("Employee " + e.id);
+        select.appendChild(opt);
+    });
+}
+
+async function loadMetrics() {
+    let res = await fetch("/api/attendance/dashboard-metrics");
+    let data = await res.json();
+
+    // KPI cards
+    document.getElementById("present").innerText = data.present;
+    document.getElementById("late").innerText = data.late;
+    document.getElementById("active").innerText = data.active;
+    document.getElementById("inactive").innerText = data.inactive;
+
+    document.getElementById("raw").innerText = JSON.stringify(data, null, 2);
+
+    renderChart(data);
+}
+
+function renderChart(data) {
+    let ctx = document.getElementById("pieChart").getContext("2d");
+
+    let chartData = {
+        labels: ["Present", "Late", "Active", "Inactive"],
+        datasets: [{
+            data: [data.present, data.late, data.active, data.inactive]
+        }]
+    };
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: "pie",
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+async function checkIn() {
+    let emp = document.getElementById("empSelect").value;
+
+    await fetch("/api/attendance/checkin", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({employee_id: parseInt(emp), company_id: 1})
+    });
+
+    loadMetrics();
+}
+
+async function checkOut() {
+    let emp = document.getElementById("empSelect").value;
+
+    await fetch("/api/attendance/checkout/" + emp, {
+        method: "POST"
+    });
+
+    loadMetrics();
+}
+
+loadEmployees();
+loadMetrics();
+setInterval(loadMetrics, 5000);
+
+</script>
+
+</body>
+</html>

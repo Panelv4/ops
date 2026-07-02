@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRM</title>
+</head>
+<body>
+    <h2>CRM - Leads</h2>
+
+    <form id="leadForm">
+        <input id="name" placeholder="Lead Name" required>
+        <input id="email" placeholder="Email">
+        <input id="phone" placeholder="Phone">
+        <button type="submit">Add Lead</button>
+    </form>
+
+    <hr>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody id="leadTable"></tbody>
+    </table>
+
+<script>
+async function loadLeads(){
+    const res = await fetch('/crm/leads?company_id=1');
+    const data = await res.json();
+
+    document.getElementById('leadTable').innerHTML =
+        data.map(l => `
+            <tr>
+                <td>${l.id}</td>
+                <td>${l.name}</td>
+                <td>${l.status}</td>
+                <td>${l.score}</td>
+            </tr>
+        `).join('');
+}
+
+document.getElementById('leadForm').onsubmit = async(e)=>{
+    e.preventDefault();
+
+    await fetch('/crm/leads',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            name:name.value,
+            email:email.value,
+            phone:phone.value,
+            company_id:1
+        })
+    });
+
+    e.target.reset();
+    loadLeads();
+}
+
+loadLeads();
+</script>
+
+</body>
+</html>
