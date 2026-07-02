@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from database.db import get_connection
-import bcrypt
 
 register_bp = Blueprint("register", __name__)
 
@@ -8,27 +7,29 @@ register_bp = Blueprint("register", __name__)
 def register():
     data = request.get_json()
 
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
-
-    if not username or not email or not password:
-        return jsonify({"error": "Missing fields"}), 400
-
-    hashed_password = bcrypt.hashpw(
-        password.encode(),
-        bcrypt.gensalt()
-    ).decode()
+    username = data["username"]
+    email = data["email"]
+    password = data["password"]
+    company_name = data["company"]
 
     conn = get_connection()
     cursor = conn.cursor()
 
+    # create company
+    cursor.execute("INSERT INTO companies (name) VALUES (?)", (company_name,))
+    company_id = cursor.lastrowid
+
+    # create user linked to company
     cursor.execute("""
-        INSERT INTO users (username, email, password, company_id, role)
-        VALUES (?, ?, ?, NULL, 'employee')
-    """, (username, email, hashed_password))
+        INSERT INTO users (username, email, password, role, company_id)
+        VALUES (?, ?, ?, ?, ?)
+    """, (username, email, password, "admin", company_id))
 
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "User registered successfully"})
+    return jsonify({
+        "status": "success",
+        "message": "SaaS workspace created",
+        "company_id": company_id
+    })

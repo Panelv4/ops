@@ -7,6 +7,8 @@ from auth.register import register_bp
 from auth.rbac import role_required
 
 app = Flask(__name__)
+from modules.billing.routes import billing_bp
+app.register_blueprint(billing_bp)
 app.secret_key = "supersecretkey"
 
 # ---------------- INIT DB ----------------

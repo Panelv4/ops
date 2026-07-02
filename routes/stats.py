@@ -1,11 +1,18 @@
 from flask import Blueprint, request, jsonify
 from database.db import get_connection
+from auth.jwt_handler import verify_token
 
 stats_bp = Blueprint("stats", __name__)
 
 @stats_bp.route("/stats")
 def stats():
-    company_id = request.args.get("company_id")
+    token = request.headers.get("Authorization", "").replace("Bearer ", "")
+    user = verify_token(token)
+
+    if not user:
+        return jsonify({"error": "unauthorized"}), 401
+
+    company_id = user["company_id"]
 
     conn = get_connection()
     cursor = conn.cursor()

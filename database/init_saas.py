@@ -56,3 +56,12 @@ def init_saas():
 
     conn.commit()
     conn.close()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS subscriptions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company_id INTEGER,
+        plan TEXT,
+        status TEXT
+    )
+    """)
