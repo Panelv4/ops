@@ -5,30 +5,30 @@ crm_bp = Blueprint("crm", __name__)
 
 @crm_bp.route("/crm/leads", methods=["GET"])
 def get_leads():
+    company_id = request.args.get("company_id")
+
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM leads")
-    leads = [dict(row) for row in cursor.fetchall()]
-
-    conn.close()
-    return jsonify(leads)
+    cursor.execute("SELECT * FROM leads WHERE company_id=?", (company_id,))
+    return jsonify([dict(x) for x in cursor.fetchall()])
 
 @crm_bp.route("/crm/leads", methods=["POST"])
 def add_lead():
     data = request.get_json()
+    company_id = data["company_id"]
+
+    score = len(data["name"]) * 10
 
     conn = get_connection()
     cursor = conn.cursor()
 
-    score = len(data["name"]) * 10  # simple scoring logic
-
     cursor.execute(
-        "INSERT INTO leads (name, score) VALUES (?, ?)",
-        (data["name"], score)
+        "INSERT INTO leads (name, score, status, company_id) VALUES (?, ?, ?, ?)",
+        (data["name"], score, "new", company_id)
     )
 
     conn.commit()
     conn.close()
 
-    return jsonify({"status": "lead created", "score": score})
+    return jsonify({"status": "created", "score": score})

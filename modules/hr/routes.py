@@ -5,28 +5,28 @@ hr_bp = Blueprint("hr", __name__)
 
 @hr_bp.route("/hr/employees", methods=["GET"])
 def get_employees():
+    company_id = request.args.get("company_id")
+
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM employees")
-    employees = [dict(row) for row in cursor.fetchall()]
-
-    conn.close()
-    return jsonify(employees)
+    cursor.execute("SELECT * FROM employees WHERE company_id=?", (company_id,))
+    return jsonify([dict(x) for x in cursor.fetchall()])
 
 @hr_bp.route("/hr/employees", methods=["POST"])
 def add_employee():
     data = request.get_json()
+    company_id = data["company_id"]
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO employees (name, role) VALUES (?, ?)",
-        (data["name"], data["role"])
+        "INSERT INTO employees (name, role, company_id) VALUES (?, ?, ?)",
+        (data["name"], data["role"], company_id)
     )
 
     conn.commit()
     conn.close()
 
-    return jsonify({"status": "employee added"})
+    return jsonify({"status": "created"})

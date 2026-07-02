@@ -3,9 +3,11 @@ import datetime
 
 SECRET = "supersecretkey"
 
-def generate_token(user_id):
+def generate_token(user):
     payload = {
-        "user_id": user_id,
+        "user_id": user["id"],
+        "company_id": user["company_id"],
+        "role": user["role"],
         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1)
     }
     return jwt.encode(payload, SECRET, algorithm="HS256")
