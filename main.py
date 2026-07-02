@@ -1,5 +1,13 @@
-from fastapi import FastAPI
-app=FastAPI(title='OpsPilotAI')
-@app.get('/')
-def root():
-    return {'status':'ok','message':'OpsPilotAI backend running'}
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return {
+        "status": "success",
+        "message": "OpsPilotAI is running in Termux!"
+    }
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)
