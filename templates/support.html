@@ -1,0 +1,27 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+
+<h2>Support Tickets</h2>
+
+<div id="tickets">Loading...</div>
+
+<script>
+async function loadTickets() {
+    const res = await fetch("/support/tickets");
+    const data = await res.json();
+
+    document.getElementById("tickets").innerHTML =
+        data.map(t => `
+            <div class="card">
+                <b>#${t.id}</b><br>
+                ${t.issue}<br>
+                Status: ${t.status}
+            </div>
+        `).join("");
+}
+
+loadTickets();
+</script>
+
+{% endblock %}

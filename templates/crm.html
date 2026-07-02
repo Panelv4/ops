@@ -1,0 +1,26 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+
+<h2>CRM - Leads</h2>
+
+<div id="leads">Loading...</div>
+
+<script>
+async function loadLeads() {
+    const res = await fetch("/crm/leads");
+    const data = await res.json();
+
+    document.getElementById("leads").innerHTML =
+        data.map(l => `
+            <div class="card">
+                <b>${l.name}</b><br>
+                Score: ${l.score}
+            </div>
+        `).join("");
+}
+
+loadLeads();
+</script>
+
+{% endblock %}

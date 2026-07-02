@@ -1,0 +1,26 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+
+<h2>Live Dashboard 📊</h2>
+
+<div id="stats">
+    Loading stats...
+</div>
+
+<script>
+async function loadStats() {
+    const res = await fetch("/stats");
+    const data = await res.json();
+
+    document.getElementById("stats").innerHTML = `
+        <div class="card">Users: ${data.users}</div>
+        <div class="card">Companies: ${data.companies}</div>
+        <div class="card">Active Sessions: ${data.active_sessions}</div>
+    `;
+}
+
+loadStats();
+</script>
+
+{% endblock %}

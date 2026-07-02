@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from database.db import get_connection
 import bcrypt
+from auth.jwt_handler import generate_token
 
 login_bp = Blueprint("login", __name__)
 
@@ -17,25 +18,38 @@ def login():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM users WHERE email=?",
-        (email,)
-    )
+    # JOIN users + companies
+    cursor.execute("""
+        SELECT 
+            users.id,
+            users.username,
+            users.email,
+            users.password,
+            users.company_id,
+            companies.name as company_name
+        FROM users
+        LEFT JOIN companies
+        ON users.company_id = companies.id
+        WHERE users.email = ?
+    """, (email,))
 
     user = cursor.fetchone()
     conn.close()
 
-    if user and bcrypt.checkpw(
-        password.encode(),
-        user["password"].encode()
-    ):
+    if user and bcrypt.checkpw(password.encode(), user["password"].encode()):
+        token = generate_token(user["id"])
+
         return jsonify({
             "status": "success",
+            "token": token,
             "user": {
                 "id": user["id"],
                 "username": user["username"],
                 "email": user["email"],
-                "company": user["company"]
+                "company": {
+                    "id": user["company_id"],
+                    "name": user["company_name"]
+                }
             }
         })
 

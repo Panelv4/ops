@@ -1,0 +1,26 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+
+<h2>HR - Employees</h2>
+
+<div id="employees">Loading...</div>
+
+<script>
+async function loadEmployees() {
+    const res = await fetch("/hr/employees");
+    const data = await res.json();
+
+    document.getElementById("employees").innerHTML =
+        data.map(e => `
+            <div class="card">
+                <b>${e.name}</b><br>
+                Role: ${e.role}
+            </div>
+        `).join("");
+}
+
+loadEmployees();
+</script>
+
+{% endblock %}
