@@ -1,3 +1,4 @@
+from auth.login import login_bp
 from auth.register import register_bp
 from flask import Flask
 from database.db import init_db
@@ -5,7 +6,7 @@ from database.db import init_db
 app = Flask(__name__)
 app.register_blueprint(register_bp)
 init_db()
-
+app.register_blueprint(login_bp)
 @app.route("/")
 def home():
     return {

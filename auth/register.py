@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database.db import get_connection
-import hashlib
+import bcrypt
 
 register_bp = Blueprint("register", __name__)
 
@@ -16,7 +16,10 @@ def register():
     if not username or not email or not password:
         return jsonify({"error": "Missing required fields"}), 400
 
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    hashed_password = bcrypt.hashpw(
+    password.encode(),
+    bcrypt.gensalt()
+).decode()
 
     conn = get_connection()
     cursor = conn.cursor()
