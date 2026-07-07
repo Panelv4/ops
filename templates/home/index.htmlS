@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>OpsPilot • The Operating System for Modern Business</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/static/css/home.css">
+
+</head>
+
+<body>
+
+<div class="bg-grid"></div>
+
+<header>
+
+<nav class="navbar">
+
+<div class="logo">
+
+<span class="logo-dot"></span>
+
+OpsPilot
+
+</div>
+
+<div class="nav-links">
+
+<a href="#features">Features</a>
+
+<a href="#pricing">Pricing</a>
+
+<a href="#about">About</a>
+
+<a href="/login">Login</a>
+
+<a class="cta-btn" href="/register-page">
+
+Start Free
+
+</a>
+
+</div>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-left">
+
+<p class="tag">
+
+BUSINESS OPERATING SYSTEM
+
+</p>
+
+<h1>
+
+Run Your Entire Business
+
+From One Intelligent Platform
+
+</h1>
+
+<p class="subtitle">
+
+Manage employees, CRM, inventory, finance, attendance and tasks from one beautifully designed dashboard.
+
+</p>
+
+<div class="hero-buttons">
+
+<a class="primary-btn" href="/register-page">
+
+Start Free →
+
+</a>
+
+<a class="secondary-btn" href="/login">
+
+Live Demo
+
+</a>
+
+</div>
+
+</div>
+
+<div class="hero-right">
+
+<div class="dashboard-card">
+
+<div class="dash-header">
+
+<div class="circle red"></div>
+
+<div class="circle yellow"></div>
+
+<div class="circle green"></div>
+
+</div>
+
+<div class="dash-body">
+
+<div class="stat">
+
+<h2 id="empCount">248</h2>
+
+<p>Employees</p>
+
+</div>
+
+<div class="stat">
+
+<h2>₹18.4L</h2>
+
+<p>Revenue</p>
+
+</div>
+
+<div class="stat">
+
+<h2>91%</h2>
+
+<p>Tasks Done</p>
+
+</div>
+
+<div class="stat">
+
+<h2>126</h2>
+
+<p>CRM Leads</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<script src="/static/js/home.js"></script>
+
+</body>
+
+</html>

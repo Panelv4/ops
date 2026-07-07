@@ -1,0 +1,21 @@
+cat > templates/layout/navbar.html << 'EOF'
+<div class="topbar">
+
+<div>
+<h2>{{ title or "Dashboard" }}</h2>
+<small>Welcome to OpsPilot ERP<<input
+type="search"
+placeholder="🔍 Search..."
+class="search-box">
+
+<button>🔔</button>
+
+<button>⚙️</button>
+
+<div class="avatar">
+👤 Admin
+</div>
+
+</div>
+
+</div>

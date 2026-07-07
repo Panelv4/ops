@@ -1,17 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Tasks</title>
-</head>
-<body>
+{% extends "layout/base.html" %}
 
-<h1>Task Manager</h1>
+{% block content %}
 
-<button>Add Task</button>
+<h1>📋 Task Manager</h1>
 
-<table id="tasks"></table>
+<div class="card" id="taskStats">Loading...</div>
+
+<div class="card">
+    <button onclick="showTaskModal()">➕ Add Task</button>
+</div>
+
+<div class="card">
+<table width="100%">
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Task</th>
+    <th>Status</th>
+    <th>Priority</th>
+    <th>Assigned</th>
+</tr>
+</thead>
+<tbody id="taskTable"></tbody>
+</table>
+</div>
 
 <script src="/static/js/tasks.js"></script>
 
-</body>
-</html>
+{% endblock %}

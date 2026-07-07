@@ -29,6 +29,8 @@ def get_employee(employee_id):
 def create_employee():
     data = request.get_json(force=True)
     employee_id = EmployeeService.create(data)
+    from database.activity import log_activity
+    log_activity("employees","create","Employee created")
     return jsonify({
         "status": "success",
         "employee_id": employee_id

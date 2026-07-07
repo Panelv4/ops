@@ -8,17 +8,11 @@ class EmployeeService:
         conn = get_connection()
         cur = conn.cursor()
 
-        cur.execute("""
-        SELECT *
-        FROM employees
-        ORDER BY created_at DESC
-        """)
-
+        cur.execute("SELECT * FROM employees ORDER BY created_at DESC")
         rows = [dict(r) for r in cur.fetchall()]
 
         conn.close()
         return rows
-
 
     @staticmethod
     def get(employee_id):
@@ -31,11 +25,9 @@ class EmployeeService:
         )
 
         row = cur.fetchone()
-
         conn.close()
 
         return dict(row) if row else None
-
 
     @staticmethod
     def create(data):
@@ -46,40 +38,32 @@ class EmployeeService:
         cur.execute("""
         INSERT INTO employees
         (
-            employee_id,
             company_id,
             name,
             email,
             phone,
             department,
-            designation,
+            position,
             salary,
             status
         )
-        VALUES
-        (?,?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?,?)
         """, (
-
-            data["employee_id"],
             data.get("company_id", 1),
             data["name"],
-            data["email"],
+            data.get("email", ""),
             data.get("phone", ""),
             data.get("department", ""),
-            data.get("designation", ""),
+            data.get("position", ""),
             data.get("salary", 0),
             data.get("status", "Active")
-
         ))
 
         conn.commit()
-
-        employee = cur.lastrowid
-
+        emp_id = cur.lastrowid
         conn.close()
 
-        return employee
-
+        return emp_id
 
     @staticmethod
     def update(emp_id, data):
@@ -90,33 +74,29 @@ class EmployeeService:
         cur.execute("""
         UPDATE employees
         SET
-        name=?,
-        email=?,
-        phone=?,
-        department=?,
-        designation=?,
-        salary=?,
-        status=?
+            name=?,
+            email=?,
+            phone=?,
+            department=?,
+            position=?,
+            salary=?,
+            status=?
         WHERE id=?
         """, (
-
             data["name"],
-            data["email"],
+            data.get("email", ""),
             data.get("phone", ""),
             data.get("department", ""),
-            data.get("designation", ""),
+            data.get("position", ""),
             data.get("salary", 0),
             data.get("status", "Active"),
             emp_id
-
         ))
 
         conn.commit()
-
         conn.close()
 
         return True
-
 
     @staticmethod
     def delete(emp_id):
@@ -130,11 +110,9 @@ class EmployeeService:
         )
 
         conn.commit()
-
         conn.close()
 
         return True
-
 
     @staticmethod
     def search(keyword):
@@ -146,25 +124,21 @@ class EmployeeService:
         SELECT *
         FROM employees
         WHERE
-        name LIKE ?
-        OR email LIKE ?
-        OR department LIKE ?
-        OR designation LIKE ?
+            name LIKE ?
+            OR email LIKE ?
+            OR department LIKE ?
+            OR position LIKE ?
         """, (
-
             f"%{keyword}%",
             f"%{keyword}%",
             f"%{keyword}%",
             f"%{keyword}%"
-
         ))
 
         rows = [dict(r) for r in cur.fetchall()]
-
         conn.close()
 
         return rows
-
 
     @staticmethod
     def stats():
@@ -177,25 +151,19 @@ class EmployeeService:
         cur.execute("SELECT COUNT(*) FROM employees")
         stats["total"] = cur.fetchone()[0]
 
-        cur.execute(
-            "SELECT COUNT(*) FROM employees WHERE status='Active'"
-        )
+        cur.execute("SELECT COUNT(*) FROM employees WHERE status='Active'")
         stats["active"] = cur.fetchone()[0]
 
-        cur.execute(
-            "SELECT COUNT(*) FROM employees WHERE status='Inactive'"
-        )
+        cur.execute("SELECT COUNT(*) FROM employees WHERE status='Inactive'")
         stats["inactive"] = cur.fetchone()[0]
 
         cur.execute("""
-        SELECT department,
-               COUNT(*)
+        SELECT department, COUNT(*)
         FROM employees
         GROUP BY department
         """)
 
-        stats["departments"] = cur.fetchall()
+        stats["departments"] = [dict(r) for r in cur.fetchall()]
 
         conn.close()
-
         return stats

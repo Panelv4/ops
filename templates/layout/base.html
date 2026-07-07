@@ -1,56 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>{{ title if title else "OpsPilot" }}</title>
+<title>{{ title or "OpsPilot ERP" }}</title>
 
 <link rel="stylesheet" href="/static/css/app.css">
-
+<link rel="stylesheet" href="/static/css/dashboard.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
 
-<div class="sidebar">
+<div class="layout">
 
-<h2>OpsPilot</h2>
+    <aside class="sidebar">
 
-<a href="/dashboard">🏠 Dashboard</a>
+        <div class="logo">
+            <h2>🚀 OpsPilot</h2>
+        </div>
 
-<a href="/employees">👥 Employees</a>
+        <nav>
 
-<a href="/attendance">🕒 Attendance</a>
+            <a href="/dashboard">🏠 Dashboard</a>
 
-<a href="/tasks">📋 Tasks</a>
+            <h4>HR</h4>
 
-<a href="/crm">💼 CRM</a>
+            <a href="/employees">👥 Employees</a>
+            <a href="/attendance">🕒 Attendance</a>
+            <a href="/tasks">📋 Tasks</a>
 
-<a href="/customers">👤 Customers</a>
+            <h4>Business</h4>
 
-<a href="/orders">🛒 Orders</a>
+            <a href="/crm">🤝 CRM</a>
+            <a href="/customers">👤 Customers</a>
+            <a href="/sales">💳 Sales</a>
+            <a href="/inventory">📦 Inventory</a>
+            <a href="/finance">💰 Finance</a>
 
-<a href="/inventory">📦 Inventory</a>
+            <h4>Insights</h4>
 
-<a href="/finance">💰 Finance</a>
+            <a href="/analytics">📊 Analytics</a>
+            <a href="/reports">📑 Reports</a>
 
-<a href="/analytics">📊 Analytics</a>
+            <h4>System</h4>
 
-<a href="/mail">📧 Mail</a>
+            <a href="/mail">📧 Mail</a>
+            <a href="/ai">🤖 AI Assistant</a>
+            <a href="/settings">⚙ Settings</a>
 
-<a href="/settings">⚙ Settings</a>
+        </nav>
+
+    </aside>
+
+    <main class="main">
+
+{% include "layout/navbar.html" %}
+        {% block content %}{% endblock %}
+
+    </main>
 
 </div>
 
-<div class="main">
-
-{% block content %}
-
-{% endblock %}
-
-</div>
-
+<script src="/static/js/api.js"></script>
+<script src="/static/js/search.js"></script>
+<script src="/static/js/components/toast.js"></script>
+<div id="loader"><div class="spinner"></div></div>
+<script src="/static/js/components/loader.js"></script>
+<script src="/static/js/components/datatable.js"></script>
+<script src="/static/js/components/notifications.js"></script>
 </body>
 </html>

@@ -2,16 +2,182 @@
 
 {% block content %}
 
-<h1>Dashboard</h1>
+<div class="dash-container">
 
-<div class="card">
-    <h2>System Overview</h2>
-    <p>All modules will appear here as live widgets.</p>
+<!-- HEADER -->
+
+<div class="dash-header">
+
+<div>
+<h1>Good morning, Admin 👋</h1>
+<p>Your business overview for today</p>
 </div>
 
-<div class="card">
-    <h3>Quick Stats</h3>
-    <p>Employees, Attendance, Tasks, Revenue, etc.</p>
+<button class="refresh-btn" onclick="loadDashboardV2()">
+↻ Refresh
+</button>
+
 </div>
+
+
+<!-- KPI CARDS -->
+
+<div class="kpi-grid">
+
+<div class="dash-card kpi">
+<span>👥 Employees</span>
+<h2 id="employeesCount">0</h2>
+<p>Active workforce</p>
+</div>
+
+
+<div class="dash-card kpi">
+<span>🤝 CRM Leads</span>
+<h2 id="crmCount">0</h2>
+<p>Customer pipeline</p>
+</div>
+
+
+<div class="dash-card kpi">
+<span>📦 Inventory</span>
+<h2 id="inventoryCount">0</h2>
+<p>Products tracked</p>
+</div>
+
+
+<div class="dash-card kpi">
+<span>💰 Revenue</span>
+<h2 id="revenueCount">₹0</h2>
+<p>Current performance</p>
+</div>
+
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="dashboard-grid">
+
+
+<div>
+
+
+<div class="dash-card">
+
+<h3>📈 Business Performance</h3>
+<div class="chart-box">
+
+<canvas id="revenueChart"></canvas>
+
+</div>
+
+
+</div>
+<div class="dash-card ai-panel">
+
+<div class="ai-header">
+
+<h3>🤖 OpsPilot Intelligence</h3>
+
+<span class="health-badge">
+Healthy
+</span>
+
+</div>
+
+
+<div class="health-score">
+
+<div class="score-circle">
+
+<span id="healthScore">
+86
+</span>
+
+%
+
+</div>
+
+
+<div>
+
+<h4>Business Health</h4>
+
+<p>
+Based on attendance, sales, inventory and activity.
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<div id="insightsBox">
+
+Loading insights...
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<div>
+
+
+<div class="dash-card">
+
+<h3>⚡ Smart Insights</h3>
+
+<div id="insightsBox">
+Loading...
+</div>
+
+</div>
+
+
+
+<div class="dash-card">
+
+<h3>🚀 Quick Actions</h3>
+
+
+<div class="quick-actions">
+
+<a href="/employees">+ Employee</a>
+
+<a href="/tasks">+ Task</a>
+
+<a href="/crm">+ Lead</a>
+
+<a href="/inventory">+ Product</a>
+
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<script src="/static/js/dashboard_v2.js"></script>
+
 
 {% endblock %}

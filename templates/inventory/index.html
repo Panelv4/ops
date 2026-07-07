@@ -1,0 +1,51 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+
+<h1>📦 Inventory</h1>
+
+<div class="card" id="inventoryStats">Loading...</div>
+
+<div class="card">
+    <button onclick="showProductModal()">➕ Add Product</button>
+    <input id="search" placeholder="Search product..." onkeyup="loadInventory()">
+</div>
+
+<div class="card">
+<table width="100%">
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Stock</th>
+    <th>Buying</th>
+    <th>Selling</th>
+    <th>Status</th>
+</tr>
+</thead>
+<tbody id="inventoryTable"></tbody>
+</table>
+</div>
+
+<!-- MODAL -->
+<div id="productModal" style="display:none;position:fixed;top:15%;left:30%;width:40%;background:#fff;padding:20px;box-shadow:0 0 20px rgba(0,0,0,0.2);">
+
+<h2>Add Product</h2>
+
+<input id="name" placeholder="Product Name"><br><br>
+<input id="sku" placeholder="SKU"><br><br>
+<input id="category" placeholder="Category"><br><br>
+<input id="quantity" type="number" placeholder="Quantity"><br><br>
+<input id="buying_price" type="number" placeholder="Buying Price"><br><br>
+<input id="selling_price" type="number" placeholder="Selling Price"><br><br>
+<input id="supplier" placeholder="Supplier"><br><br>
+
+<button onclick="saveProduct()">Save</button>
+<button onclick="closeModal()">Cancel</button>
+
+</div>
+
+<script src="/static/js/inventory.js"></script>
+
+{% endblock %}

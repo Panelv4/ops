@@ -1,99 +1,138 @@
 let editingId = null;
 
-async function loadEmployees() {
-    let res = await fetch("/api/employees");
-    let data = await res.json();
+async function loadEmployees(){
 
-    let tbody = document.getElementById("empTable");
-    tbody.innerHTML = "";
+    const res = await fetch("/api/employees");
+    const data = await res.json();
 
-    data.forEach(e => {
+    const tbody = document.getElementById("empTable");
+    tbody.innerHTML="";
+
+    data.forEach(e=>{
+
         tbody.innerHTML += `
         <tr>
             <td>${e.id}</td>
-            <td>${e.name}</td>
-            <td>${e.email}</td>
-            <td>${e.department}</td>
-            <td>${e.status}</td>
+            <td>${e.name||""}</td>
+            <td>${e.email||""}</td>
+            <td>${e.phone||""}</td>
+            <td>${e.department||""}</td>
+            <td>${e.position||""}</td>
+            <td>${e.status||""}</td>
             <td>
-                <button onclick="editEmployee(${e.id}, '${e.name}', '${e.email}', '${e.department}', '${e.status}')">Edit</button>
-                <button onclick="deleteEmp(${e.id})">Delete</button>
+                <button onclick='editEmployee(${JSON.stringify(e)})'>✏️</button>
+                <button onclick='deleteEmployee(${e.id})'>🗑️</button>
             </td>
         </tr>`;
     });
+
 }
 
-async function loadStats() {
-    let res = await fetch("/api/employees/stats");
-    let s = await res.json();
+async function loadStats(){
 
-    document.getElementById("statsBox").innerHTML = `
-        <b>Total:</b> ${s.total} |
-        <b>Active:</b> ${s.active} |
-        <b>Inactive:</b> ${s.inactive}
+    const res=await fetch("/api/employees/stats");
+    const s=await res.json();
+
+    document.getElementById("statsBox").innerHTML=
+    `
+    <b>Total:</b> ${s.total}
+    &nbsp;&nbsp;
+    <b>Active:</b> ${s.active}
+    &nbsp;&nbsp;
+    <b>Inactive:</b> ${s.inactive}
     `;
+
 }
 
-function showAddModal() {
-    editingId = null;
-    document.getElementById("modalTitle").innerText = "Add Employee";
+function showAddModal(){
 
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("dept").value = "";
-    document.getElementById("status").value = "Active";
+    editingId=null;
 
-    document.getElementById("modal").style.display = "block";
+    modalTitle.innerText="Add Employee";
+
+    name.value="";
+    email.value="";
+    phone.value="";
+    dept.value="";
+    position.value="";
+    salary.value="";
+    status.value="Active";
+
+    modal.style.display="block";
+
 }
 
-function editEmployee(id, name, email, dept, status) {
-    editingId = id;
+function editEmployee(e){
 
-    document.getElementById("modalTitle").innerText = "Edit Employee";
+    editingId=e.id;
 
-    document.getElementById("name").value = name;
-    document.getElementById("email").value = email;
-    document.getElementById("dept").value = dept;
-    document.getElementById("status").value = status;
+    modalTitle.innerText="Edit Employee";
 
-    document.getElementById("modal").style.display = "block";
+    name.value=e.name||"";
+    email.value=e.email||"";
+    phone.value=e.phone||"";
+    dept.value=e.department||"";
+    position.value=e.position||"";
+    salary.value=e.salary||0;
+    status.value=e.status||"Active";
+
+    modal.style.display="block";
+
 }
 
-async function saveEmployee() {
-    let payload = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        department: document.getElementById("dept").value,
-        status: document.getElementById("status").value
+async function saveEmployee(){
+
+    const payload={
+
+        name:name.value,
+        email:email.value,
+        phone:phone.value,
+        department:dept.value,
+        position:position.value,
+        salary:Number(salary.value)||0,
+        status:status.value
+
     };
 
-    if (editingId) {
-        await fetch("/api/employees/" + editingId, {
-            method: "PUT",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(payload)
-        });
-    } else {
-        await fetch("/api/employees", {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(payload)
-        });
-    }
+    const url=editingId
+        ?"/api/employees/"+editingId
+        :"/api/employees";
 
+    const method=editingId?"PUT":"POST";
+
+    await fetch(url,{
+        method,
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(payload)
+    });
+
+    showToast("Employee saved successfully");
     closeModal();
-    loadEmployees();
-    loadStats();
+
+    await loadEmployees();
+    await loadStats();
+
 }
 
-async function deleteEmp(id) {
-    await fetch("/api/employees/" + id, { method: "DELETE" });
+async function deleteEmployee(id){
+
+    if(!confirm("Delete employee?")) return;
+
+    await fetch("/api/employees/"+id,{
+        method:"DELETE"
+    });
+
     loadEmployees();
     loadStats();
+
 }
 
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
+function closeModal(){
+
+    modal.style.display="none";
+
 }
 
 loadEmployees();

@@ -2,49 +2,60 @@
 
 {% block content %}
 
-<h1>👥 Employees</h1>
+<h1>👥 Employee Management</h1>
 
-<!-- STATS -->
-<div class="card" id="statsBox">
-    Loading stats...
-</div>
+<div class="card" id="statsBox">Loading...</div>
 
-<!-- ACTION BAR -->
 <div class="card">
     <button onclick="showAddModal()">➕ Add Employee</button>
-    <input id="search" placeholder="Search..." onkeyup="loadEmployees()" />
 </div>
 
-<!-- TABLE -->
 <div class="card">
-<table width="100%" border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Dept</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="empTable"></tbody>
+<table width="100%">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Department</th>
+<th>Position</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="empTable"></tbody>
+
 </table>
 </div>
 
-<!-- ADD/EDIT MODAL -->
-<div id="modal" style="display:none; position:fixed; top:20%; left:30%; background:white; padding:20px; border:1px solid #ccc;">
-    <h3 id="modalTitle">Add Employee</h3>
+<div id="modal" style="display:none;position:fixed;top:10%;left:25%;width:50%;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,.2);">
 
-    <input id="emp_id" type="hidden">
+<h2 id="modalTitle">Employee</h2>
 
-    <input id="name" placeholder="Name"><br><br>
-    <input id="email" placeholder="Email"><br><br>
-    <input id="dept" placeholder="Department"><br><br>
-    <input id="status" placeholder="Status (Active/Inactive)"><br><br>
+<input id="name" placeholder="Name"><br><br>
 
-    <button onclick="saveEmployee()">Save</button>
-    <button onclick="closeModal()">Close</button>
+<input id="email" placeholder="Email"><br><br>
+
+<input id="phone" placeholder="Phone"><br><br>
+
+<input id="dept" placeholder="Department"><br><br>
+
+<input id="position" placeholder="Position"><br><br>
+
+<input id="salary" type="number" placeholder="Salary"><br><br>
+
+<select id="status">
+<option>Active</option>
+<option>Inactive</option>
+</select>
+
+<br><br>
+
+<button onclick="saveEmployee()">💾 Save</button>
+<button onclick="closeModal()">❌ Cancel</button>
+
 </div>
 
 <script src="/static/js/employees.js"></script>

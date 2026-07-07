@@ -1,68 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>CRM</title>
-</head>
-<body>
-    <h2>CRM - Leads</h2>
+{% extends "layout/base.html" %}
 
-    <form id="leadForm">
-        <input id="name" placeholder="Lead Name" required>
-        <input id="email" placeholder="Email">
-        <input id="phone" placeholder="Phone">
-        <button type="submit">Add Lead</button>
-    </form>
+{% block content %}
 
-    <hr>
+<h1>🤝 CRM Leads</h1>
 
-    <table border="1" cellpadding="8">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody id="leadTable"></tbody>
-    </table>
+<div class="card" id="crmStats">Loading...</div>
 
-<script>
-async function loadLeads(){
-    const res = await fetch('/crm/leads?company_id=1');
-    const data = await res.json();
+<div class="card">
+    <button onclick="showLeadModal()">➕ Add Lead</button>
+</div>
 
-    document.getElementById('leadTable').innerHTML =
-        data.map(l => `
-            <tr>
-                <td>${l.id}</td>
-                <td>${l.name}</td>
-                <td>${l.status}</td>
-                <td>${l.score}</td>
-            </tr>
-        `).join('');
-}
+<div class="card">
+<table width="100%">
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Score</th>
+    <th>Status</th>
+</tr>
+</thead>
+<tbody id="crmTable"></tbody>
+</table>
+</div>
 
-document.getElementById('leadForm').onsubmit = async(e)=>{
-    e.preventDefault();
+<script src="/static/js/crm.js"></script>
 
-    await fetch('/crm/leads',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-            name:name.value,
-            email:email.value,
-            phone:phone.value,
-            company_id:1
-        })
-    });
-
-    e.target.reset();
-    loadLeads();
-}
-
-loadLeads();
-</script>
-
-</body>
-</html>
+{% endblock %}
