@@ -1,3 +1,3 @@
 # OpsPilotAI
 
-Scaffold for an AI business platform.
+ops is an open source saas(software as a service) ;)
